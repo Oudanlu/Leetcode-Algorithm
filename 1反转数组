@@ -1,0 +1,34 @@
+#include <stdio.h>
+#define N 6
+
+//主函数
+int main(void)
+ {
+    int arr[N] = {1,53,7,2,9,8};
+    int i,j=N-1;
+
+
+//打印原数组
+    for(i = 0;i < N;i++)
+    {
+        printf("%d\t",arr[i]);  }
+    putchar('\n');
+
+    for(i = 0;i < N/2;i++)
+    {
+        for(;j>N-i-1;j--)
+        {
+            int temp = 0;
+            temp = arr[N-j-1];
+            arr[N-j-1] = arr[j];
+            arr[j] = temp;
+        }
+    }
+/打印翻转后的数据
+    for(i = 0;i < N;i++)
+    {
+        printf("%d\t",arr[i]);
+    }
+    putchar('\n');
+    return 0;
+}
