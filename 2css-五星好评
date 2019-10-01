@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>五星评分</title>
+    <style>
+        /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
+        .box{
+            width:320px;
+            height:60px;
+            margin:0 auto;
+            display:flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+        /* 隐藏单选 */
+        input{
+            display:none;
+        }
+        /* 五角星默认样式 */
+        input[type="radio"]+label>svg>path{
+            d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
+            stroke-width:1px;
+            fill:none;
+            stroke:#333;
+        }
+        /* 移入，点击选中的元素和下面的元素变为实心 */
+        input[type="radio"]+label:hover>svg>path,
+        input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
+        input[type="radio"]:checked+label>svg>path,
+        input[type="radio"]:checked~input[type="radio"]+label>svg>path{
+            stroke-width:0px;
+            fill:#f00;
+        }
+    </style>
+</head>
+ 
+<body>
+    <div class="box">
+        <input type="radio" id="one" name="check">
+        <label for="one">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.5px" height="53.5px">
+                <path />
+            </svg>
+        </label>
+        <input type="radio" id="two" name="check">
+        <label for="two">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.5px" height="53.5px">
+                <path />
+            </svg>
+        </label>
+        <input type="radio" id="three" name="check">
+        <label for="three">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.5px" height="53.5px">
+                <path />
+            </svg>
+        </label>
+        <input type="radio" id="four" name="check">
+        <label for="four">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.5px" height="53.5px">
+                <path />
+            </svg>
+        </label>
+        <input type="radio" id="five" name="check" checked>
+        <label for="five">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56.5px" height="53.5px">
+                <path />
+            </svg>
+        </label>
+    </div>
+ 
+</body>
+</html>
+ 
