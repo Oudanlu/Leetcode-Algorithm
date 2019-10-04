@@ -1,0 +1,90 @@
+题意：一个div垂直居中，
+其距离屏幕左右两边各10px，其高度始终是宽度的50%
+---
+
+代码实现：
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+  <div class="wrap">
+    <div class="inner">
+       A
+    </div>
+  </div>
+</body>
+</html>
+
+## css有两种方式实现上下居中：
+一种是使用flex布局的align-items属性，另一种是使用transform(注释部分)；
+
+实现高度是宽度的一半可以使用calc(50vw - 10px),
+vw是一种单位，将可视窗口切分成100份，每一份是1vw。
+实现高度是宽度的一半，div.inner宽度是100vw-20px, （20px是左右的margin），所以高度是其除以二（50vw-10px）.
+
+*{
+   margin:0;
+    padding:0;
+}
+html,body{
+ width:100%;
+  height:100%;
+}
+div.wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  background:green;
+}
+div.inner{
+  flex:1;
+  margin-left:10px;
+  margin-right:10px;
+  width:calc(100vw - 20px);
+  height:calc(50vw - 10px);
+  background:red;
+    /* transform: translateY(75%) */
+}
+
+简单版本，实现一个div左右上下居中
+---
+
+左右使用：margin:0 auto;
+上下使用定位：position:relative + top + margin-top
+(通过定位加top实现div上边框位于页面50%的位置，此时div是偏下的，我们期望div的中间位于页面的50%位置，
+所以再通过margin-top将div上移自身高度的50%即可达到目的。)
+
+代码：
+
+html:
+--
+<html>
+<body>
+<div></div>
+</body>
+</html>
+
+css：
+--
+//这一步很关键，因为默认宽高不是100%
+html, body{
+	width:100%;
+	height:100%
+}
+div{
+	width:100px;
+	height:100px;
+	background:red;
+	width:0 auto;
+	position:relative;
+	top:50%;
+	margin-top:-50px;
+}
+
