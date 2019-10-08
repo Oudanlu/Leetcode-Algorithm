@@ -1,0 +1,69 @@
+小明和小红用字符串压缩通信。 
+字符串压缩规则是：如果有连续重复的字符串比如ABCABCABC就缩写成[3|ABC]。 
+现有压缩后的字符串，设计一个解压程序还原字符串。
+
+样例：
+
+输入：
+HG[3|B[2|CA]]F
+输出：
+HGBCACABCACABCACAF
+
+代码：
+string decode(string s) {
+    string res = "", ans = "";
+    int len, start , end;
+    int time, counting;
+    time = 0, counting = 1;
+    len = s.size();
+    for (int i = 0; i < len; i++)
+    {
+        if (s[i] == '[')
+        {
+            start = i;
+            for (i = len; s[i] != ']'; i--);
+            end = i;
+            res += decode(s.substr(start + 1, end - start - 1));
+            i++;
+        }
+        if (counting && s[i] >= '0' && s[i] <= '9')
+        {
+            time = time * 10 + (s[i] - '0');
+        }
+        else if (s[i] == '|')
+        {
+            counting = 0;
+        }
+        else
+        {
+            res += s[i];
+        }
+    }
+    char tmp = res[res.size() - 1];
+    if (tmp == '\0')
+    {
+        res = res.substr(0, res.size() - 1);
+    }
+    if (time > 0)
+    {
+        for (int i = 0; i < time; i++)
+        {
+            ans.append(res);
+        }
+    }
+    else
+    {
+        ans = res;
+    }
+    return ans;
+}
+
+int main()
+{
+    string s;
+    cin >> s;
+    cout << decode(s) << endl;
+    return 0;
+} 
+
+注意：需要优化内存，这个版本内存溢出MLE了，正在考虑用栈结构重写一次
