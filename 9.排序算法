@@ -60,7 +60,6 @@ function insertSort(arr) {
 }
 ```
 
-
 ### 快排
 
 ```js
