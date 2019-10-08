@@ -1,0 +1,28 @@
+把一个由 - 或 _ 或 @ 连接的变量词组转换成驼峰写法
+
+样例：
+输入：
+content-type
+输出：
+contentType
+
+代码：
+function camel(str) {
+    // TODO
+    let ans = "";
+    let upper = false;
+    for (let index = 0; index < str.length; index++) {
+        const element = str[index];
+        if (element == '_' || element == '-' || element == '@') {
+            upper = true;
+        } else {
+            if (upper) {
+                ans += element.toUpperCase();
+            } else {
+                ans += element;
+            }
+            upper = false;
+        }
+    }
+    return ans;
+};
