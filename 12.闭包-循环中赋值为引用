@@ -1,0 +1,38 @@
+循环中赋值为引用的问题
+
+for (var i = 1; i < 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+
+## 解决方法有3种：
+
+第一种，使用立即执行函数方式
+
+for (var i = 1; i < 5; i++) {
+  (fuction(j){
+    setTimeout(function timer() {
+      console.log(j)
+    }, j * 1000)
+  })(i)
+}
+
+
+第二种，使用ES6的let
+
+for (let i = 1; i < 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+
+
+第三种，使用setTimeout的第三个参数
+
+
+for (var i = 1; i < 5; i++) {
+  setTimeout(function timer(j) {
+    console.log(j)
+  }, i * 1000, i)
+}
