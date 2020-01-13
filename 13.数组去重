@@ -1,0 +1,248 @@
+首先归纳一下数组去重的12种常见方法：
+
+pop
+push
+shift
+unshift
+slice
+splice
+sort
+reverse
+concat
+join
+indexOf
+lastIndexOf
+map
+forEach
+
+下面列举一些常用的去重方法，面试中掌握几种即可~
+
+1：set（ES6） ：不是一种数据类型，是一种数据结构；成员唯一。babel常用
+let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        let s  = new Set(ary);
+        // Array.from : 将set数据结构转成真正的数组；
+        return  Array.from(s)
+    }
+    unique(arr);
+复制代码不考虑兼容性的话，这种方法代码量最少。
+但是还无法去掉“{}”空对象，后面的高阶方法会添加去掉重复“{}”的方法。
+
+2：类似于1的set，用了剩余运算符~let  arr = [12,1,12,3,1,88,66,9,66];
+    let a = [...new Set(arr)];
+    console.log(a);//相比较1来说，简化了代码
+
+
+3：Map（ES6） ：利用了Map数据结构存值的特点
+
+
+let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        let newAry =[]; // 数组用于返回结果
+        let map = new Map();
+        for(let i=0;i<ary.length;i++){
+            if(!map.has(ary[i])){ // 如果没有该key值
+                map.set(ary[i],true);
+                newAry.push(ary[i]);
+            }
+        }
+    }
+    unique(arr);
+
+创建一个空Map数据结构，遍历需要去重的数组，把数组的每一个元素作为key存到Map中。由于Map中不会出现相同的key值，所以最终得到的就是去重后的结果。
+
+
+4：利用for嵌套for，然后splice去重（ES5中最常用）let arr = [12,1,12,3,1,88,66,9,66];
+ function unique(ary) {
+        for(let i=0;i<ary.length;i++){
+            for(j=i+1;j<ary.length;j++){
+                if(ary[i]===ary[j]){ //第一个等同于第二个，splice方法删除第二个
+                    ary.splice(j,1);
+                    j--;
+                }
+            }
+        }
+        return ary;
+    }
+    unique(arr);
+    
+    双层循环，外层循环元素，内层循环时比较值。值相同时，则删去这个值。
+    
+  
+  5：sort
+  
+  let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+       let a = ary.sort(function (a,b) {
+           return a-b;
+       });
+       for(let i=0;i<a.length;i++){
+           if(a[i]===a[i+1]){
+               a.splice(i+1,1);
+               i--;
+           }
+       }
+       return a;
+   }
+   unique(arr)
+
+sort()排序方法：根据排序后的结果进行遍历及相邻元素比对。
+
+
+6：indexOflet arr = [12,1,12,3,1,88,66,9,66];
+ function unique(ary) {
+        let newAry = [];
+        for(let i=0;i<ary.length;i++){
+            let  cur = ary[i];
+            if(newAry.indexOf(cur)===-1){
+                newAry.push(cur);
+            }
+        }
+        return newAry;
+    }
+    unique(arr)
+
+
+新建一个空的结果数组，for 循环原数组，判断结果数组是否存在当前元素，
+如果有相同的值则跳过，不相同则push进数组。
+
+
+7：filter+indexOf
+
+
+let arr = [12,1,12,3,1,88,66,9,66];
+    function unique(ary) {
+        return ary.filter(function (item,index,a) {
+                  //当前元素，在原始数组中的第一个索引==当前索引值，否则返回当前元素
+            return ary.indexOf(item)===index;
+        })
+    }
+    console.log(unique(arr));
+ 
+ 
+ 8：includes :
+ 
+ 如果数组包含那一项，返回true；不包含则返回false；
+ 
+ 
+ let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        let newAry = [];
+        let len = ary.length;
+        for(let i=0;i<len;i++){
+            let cur = ary[i];
+            if(!newAry.includes(cur)){ //includes 检测数组是否有某个值
+                newAry.push(cur);
+            }
+        }
+        return newAry;
+    }
+    console.log(unique(arr));
+    
+    
+    9：reduce+includes
+    
+    
+    let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        // reduce : 第一个是函数，第二个参数会传给第一次回调的prev;
+        return ary.reduce((prev,next)=>{
+            // 该函数返回值是下一次执行的prev;
+            return prev.includes(next)?prev:[...prev,next];
+        },[])
+    }
+    console.log(unique(arr));
+    
+  10：递归let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        let  len= ary.length;
+        ary = ary.sort(function (a,b) { //排序后更加方便去重
+            return a-b;
+        });
+        function loop(index) {
+            if(index>=1){
+                if(ary[index]===ary[index-1]){
+                    ary.splice(index,1);
+                }
+                loop(index-1) //递归loop，然后数组去重
+            }
+        }
+        loop(len-1);
+        return ary;
+    }
+    console.log(unique(arr));
+    
+    
+ 11：hasOwnProperty【有缺陷】 : 检测属性名是否是对象的一个私有属性,返回一个布尔值function unique(ary) {
+        let obj = {};
+        return ary.filter(function (item,index,a) {
+            // item : 数组每一个成员
+            // index: 成员对应的索引
+            // a : 整个数组
+            // hasOwnProperty来校验的该属性是否出现过；
+           return  obj.hasOwnProperty(typeof item+item)?false:obj[typeof item+item]=true;
+           if(obj.hasOwnProperty(typeof item+item)){
+               return false
+           }else{
+               obj[typeof item+item]=true;
+               return true;
+           }
+        })
+    }
+    console.log(unique(arr))
+
+hasOwnProperty （）：判断是否存在对象属性
+
+12：利用对象的属性不能相同的特点进行去重 【有缺陷】
+（这种方法有点问题，不建议用。但是面试时可以说，然后说另外一种方法改进它，提高面试机率）
+
+let arr = [12,1,12,3,1,88,66,9,66];
+function unique(ary) {
+        let obj = {};
+        for(let i=0;i<ary.length;i++){
+            let cur = ary[i];
+            if(obj[cur]){
+                //ary.splice(i,1);// 导致数组塌陷
+                ary[i]=ary[ary.length-1];
+                ary.length--;// 删除最后一项
+                i--;
+                continue;
+            }
+            obj[cur]=cur;// 给obj新增键值对；属性名和属性值是一样的
+        }
+    }
+    unique(arr);
+    
+13.补充 引用类型的去重
+    
+  function unique6 (arr) {
+  let newArr = []
+  let obj = {}
+  arr.forEach(item => {
+    if (typeof item !== 'object') {
+      if (newArr.indexOf(item) === -1) {
+        newArr.push(item)
+      }
+    } else {
+      let str = JSON.stringify(item)
+      if (!obj[str]) {
+        newArr.push(item)
+        obj[str] = 1
+      }
+    }
+  })
+  return newArr
+}
+let arr = [1,1,'true','true',true,true,
+15,15,false,false, undefined,undefined, 
+null,null, NaN, NaN,'NaN', 0, 0, 'a', 'a',{},{},{a:1},{b:1},{a:1}]
+console.log(unique6(arr))
+// [1, "true", true, 15, false, undefined, null, NaN, NaN, "NaN", 0, "a",{}, {a:1}, {b:1}]
+
+总结：
+数组循环两大类方法：
+
+1.两层循环法
+
+2.利用语法自身键不可重复性
+
